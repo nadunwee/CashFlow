@@ -18,19 +18,19 @@
 
 
         <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="floatingInput" placeholder="Name" name="name" autocomplete="off">
+          <input type="text" class="form-control" id="floatingInput" placeholder="Name" name="name" autocomplete="off" required>
           <label for="floatingInput">Name</label>
-        </div>
+        </div>  
         <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="floatingInput" placeholder="Username" name="username" autocomplete="off">
+          <input type="text" class="form-control" id="floatingInput" placeholder="Username" name="username" autocomplete="off" required> 
           <label for="floatingInput">Username</label>
         </div>
         <div class="form-floating mb-3">
-          <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password">
+          <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password" required >
           <label for="floatingPassword">Password</label>
         </div>
         <div class="form-floating">
-          <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="conform-password">
+          <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="conform-password" required>
           <label for="floatingPassword">Conform Password</label>
         </div>
       </div>
@@ -39,5 +39,4 @@
     </form>
   </div>
 </div>
-
 {% endblock %}

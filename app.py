@@ -38,12 +38,58 @@ def home():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    if request.method == "GET":
+    # Forget any user_id
+    session.clear()
+
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+        cursor = mysql.connection.cursor()
+
+        # Ensure username was submitted
+        if not request.form.get("username"):
+            return apology("must provide username", 403)
+
+        # Ensure password was submitted
+        elif not request.form.get("password"):
+            return apology("must provide password", 403)
+
+        # Query database for username
+        username = request.form.get("username")
+        cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+        rows = cursor.fetchone()
+
+        # Ensure username exists
+        if rows == None:
+            return apology("invalid username", 403)
+
+        # Ensure username exists and password is correct
+        if not check_password_hash(rows[-1], request.form.get("password")):
+            cursor.close()
+            return apology("invalid username and/or password", 403)
+
+        # Remember which user has logged in
+        session["user_id"] = rows[0]
+
+        # Redirect user to home page
+        return render_template("index.html")
+
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:
         return render_template("login.html")
     
-    if request.method == "POST":
-        
-        return render_template("login.html")
+@app.route("/logout")
+def logout():
+    """Log user out"""
+    
+    # Forget any user_id
+    session.clear()
+
+    # Redirect user to login form
+    return redirect("/")
+
+@app.route("/home", methods=["GET", "POST"])
+def index():
+    return render_template("index.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -80,7 +126,7 @@ def register():
         cursor.execute('INSERT INTO users (username, name, password_hash) VALUES (%s, %s, %s)', (username, name, hashed_password))
         mysql.connection.commit()
         cursor.close()
-        return render_template("register.html")
+        return render_template("login.html")
 
 @app.route("/test", methods=["GET", "POST"])
 def test():

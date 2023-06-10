@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+
+{% block body %}
+
+<div class="card border-light mb-3" style="max-width: 40rem; width: 500px; height: 350px;">
+  <div class="card-body">
+    <h4>Enter Your Expence</h4><br>
+
+    <form action="/expence" method="post">
+      
+      <div class="form-group">
+
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingInput" placeholder="Expence Method" name="expence-method" autocomplete="off" autofocus>
+          <label for="floatingInput">Expence Method</label>
+        </div>
+        <div class="form-floating">
+          <input type="number" class="form-control" id="floatingPassword" placeholder="Amount" name="ex-amount">
+          <label for="floatingPassword">Amount</label>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary" id="login-button">Add</button>
+    </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

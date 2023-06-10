@@ -71,7 +71,7 @@ def login():
         session["user_id"] = rows[0]
 
         # Redirect user to home page
-        return render_template("index.html")
+        return redirect("/dashbord")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -87,9 +87,9 @@ def logout():
     # Redirect user to login form
     return redirect("/")
 
-@app.route("/home", methods=["GET", "POST"])
-def index():
-    return render_template("index.html")
+@app.route("/dashbord", methods=["GET", "POST"])
+def dashbord():
+    return render_template("dashbord.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -123,10 +123,62 @@ def register():
         # Hash the password
         hashed_password = generate_password_hash(password)
 
+        # Add to the database
         cursor.execute('INSERT INTO users (username, name, password_hash) VALUES (%s, %s, %s)', (username, name, hashed_password))
         mysql.connection.commit()
         cursor.close()
         return render_template("login.html")
+
+@app.route("/income", methods=["GET", "POST"])
+def income():
+
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+        cursor = mysql.connection.cursor()
+
+        method = request.form.get("income-method")
+        amount = request.form.get("in-amount")
+        type = request.form.get("income")
+        user_id = session["user_id"]
+
+        # Check if method or amount empty
+        if not method or not amount:
+            return apology("Blank Method or Amount")
+        
+        # Add to the database
+        cursor.execute('INSERT INTO flow (method, amount, type, id) VALUES (%s, %s, %s, %s)', (method, amount, 'income', user_id))
+        mysql.connection.commit()
+        cursor.close()
+
+        return redirect("/dashbord")
+    
+    else:
+        return render_template("income.html")
+
+@app.route("/expence", methods=["GET", "POST"])
+def expence():
+
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+        cursor = mysql.connection.cursor()
+
+        method = request.form.get("expence-method")
+        amount = request.form.get("ex-amount")
+        user_id = session["user_id"]
+
+        # Check if method or amount empty
+        if not method or not amount:
+            return apology("Blank Method or Amount")
+        
+        # Add to the database
+        cursor.execute('INSERT INTO flow (method, amount, type, id) VALUES (%s, %s, %s, %s)', (method, amount, 'expence', user_id))
+        mysql.connection.commit()
+        cursor.close()
+
+        return redirect("/expence")
+    
+    else:
+        return render_template("expence.html")
 
 @app.route("/test", methods=["GET", "POST"])
 def test():

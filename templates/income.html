@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+
+{% block body %}
+
+<div class="card border-light mb-3" style="max-width: 40rem; width: 500px; height: 350px;">
+  <div class="card-body">
+    <h4>Enter Your Income</h4><br>
+
+    <form action="/income" method="post">
+      
+      <div class="form-group">
+
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingInput" placeholder="Income Method" name="income-method" autocomplete="off" autofocus>
+          <label for="floatingInput">Income Method</label>
+        </div>
+        <div class="form-floating">
+          <input type="number" class="form-control" id="floatingPassword" placeholder="Amount" name="in-amount">
+          <label for="floatingPassword">Amount</label>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary" id="login-button">Add</button>
+    </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

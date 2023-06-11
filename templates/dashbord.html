@@ -7,11 +7,21 @@
 
 {% block body %}
 
-<h1 style="color: white;">{{ username}} your balance is {{ balance }}</h1>
-<br><br>
 
-<div class="dashbord-table">
-    <table >
+<div class="dashbord-table" style="margin-top: 100px; margin-left: 200px; margin-right: 200px; text-align: center;">
+    <h1 id="cash-flow">Your Cash Flow</h1>
+
+    <br><br>
+    <form method="POST">
+        <label for="filter">Filter by Type:</label>
+        <select name="type" id="filter" onchange="this.form.submit()">
+            <option value="default" hidden selected disabled>Default</option>
+            <option value="all">All</option>
+            <option value="income">Income</option>
+            <option value="expence">Expense</option>
+        </select>
+    </form><br><br><br>
+    <table>
         <thead> 
             <th >Method</th>
             <th >Amount</th>
@@ -31,4 +41,25 @@
     </table>
 </div>
 
+<script>
+    // Scroll to the "Your Cash Flow" section when the page loads or after filtering
+    window.onload = function() {
+        const cashFlowSection = document.getElementById('cash-flow');
+        cashFlowSection.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    // JavaScript code to automatically submit the form when filter selection changes
+    const filterForm = document.getElementById('filter-form');
+    const filterSelect = document.getElementById('type');
+    filterSelect.addEventListener('change', () => {
+        filterForm.submit();
+    });
+
+</script>
+
+{% endblock %}
+
+{% block div%}
+
+<h1 style="color: white; display: inline-block;">{{ username}} your balance is {{ balance }}</h1>
 {% endblock %}

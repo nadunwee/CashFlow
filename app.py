@@ -90,6 +90,7 @@ def dashbord():
     
     # Get the username
     cursor = mysql.connection.cursor()
+
     cursor.execute('SELECT username FROM users WHERE id = %s', (session["user_id"],))
     result  = cursor.fetchone()
     # Remove () , and ' ' from result
@@ -98,21 +99,38 @@ def dashbord():
         username = username.strip("'")  # Remove single quotes
 
     # Get whole flow table
-    cursor.execute('SELECT * FROM flow WHERE id = %s', (session["user_id"],))
+    cursor.execute('SELECT * FROM flow WHERE id = %s ORDER BY date DESC', (session["user_id"],))
     results  = cursor.fetchall()
 
     # Get the totoal income
     cursor.execute("SELECT SUM(amount) AS total_income FROM flow WHERE type = 'income' and id = %s", (session["user_id"],))
     income  = cursor.fetchone()
-    total_income = float(income[0])
+    total_income = 0
+    if income != (None,):
+        total_income = float(income[0])
 
     # Get total expences
     cursor.execute("SELECT SUM(amount) AS total_expence FROM flow WHERE type = 'expence' and id = %s", (session["user_id"],))
     expence  = cursor.fetchone()
-    total_expence = float(expence[0])
+    total_expence = 0
+    if expence != (None,):
+        total_expence = float(expence[0])
 
     # Get Balance
-    balance = total_income - total_expence
+    balance = 0
+    if expence != (None,) or income != (None,):
+        balance = total_income - total_expence
+
+    if request.method == "POST":
+        selected_type = request.form.get("type")
+        if selected_type == "all":
+            cursor.execute('SELECT * FROM flow WHERE id = %s ORDER BY date DESC', (session["user_id"],))
+        else:
+            cursor.execute('SELECT * FROM flow WHERE type = %s AND id = %s ORDER BY date DESC', (selected_type, session["user_id"]))
+    else:
+        cursor.execute('SELECT * FROM flow WHERE id = %s ORDER BY date DESC', (session["user_id"],))
+
+    results = cursor.fetchall()
 
     return render_template("dashbord.html", username=username, results=results, balance=balance)
 
@@ -207,4 +225,4 @@ def expence():
         mysql.connection.commit()
         cursor.close()
 
-        return redirect("/expence")
+        return redirect("/dashbord")

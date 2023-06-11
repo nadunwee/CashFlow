@@ -4,18 +4,14 @@
     Register
 {% endblock %}
 
-
-{% block body %}
+{% block div%}
 
 <div class="card border-light mb-3" style="max-width: 40rem; width: 500px; height: 500px;">
   <div class="card-body">
     <h4>Enter Your Details</h4><br>
 
-
     <form action="/register" method="post">
-      
       <div class="form-group">
-
 
         <div class="form-floating mb-3">
           <input type="text" class="form-control" id="floatingInput" placeholder="Name" name="name" autocomplete="off" required>
@@ -39,4 +35,5 @@
     </form>
   </div>
 </div>
+
 {% endblock %}

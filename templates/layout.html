@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@200;300;400&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="icon" href="/static/CashFlow.png" type="image/x-icon">
     <title>CashFlow: {% block title %}{% endblock %}</title>
 </head>
 <body>
@@ -65,7 +66,7 @@
       </div>
     </div>
   </nav>
-  <div class="banner-image w-100 vh-100 d-flex justify-content-center align-items-center">
+  <div class="banner-image w-100 vh-100 d-flex justify-content-center align-items-center">{% block div%}{% endblock %}</div>
 
   {% block body %}{% endblock %}
 

@@ -1,9 +1,5 @@
 from flask import Flask, flash, redirect, render_template, request, session
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
 from flask_mysqldb import MySQL
-from datetime import datetime
 from werkzeug.security import check_password_hash, generate_password_hash
 from helpers import apology
 
@@ -89,7 +85,36 @@ def logout():
 
 @app.route("/dashbord", methods=["GET", "POST"])
 def dashbord():
-    return render_template("dashbord.html")
+    if len(session) == 0:
+        return redirect("/login")
+    
+    # Get the username
+    cursor = mysql.connection.cursor()
+    cursor.execute('SELECT username FROM users WHERE id = %s', (session["user_id"],))
+    result  = cursor.fetchone()
+    # Remove () , and ' ' from result
+    if result:
+        username = result[0]
+        username = username.strip("'")  # Remove single quotes
+
+    # Get whole flow table
+    cursor.execute('SELECT * FROM flow WHERE id = %s', (session["user_id"],))
+    results  = cursor.fetchall()
+
+    # Get the totoal income
+    cursor.execute("SELECT SUM(amount) AS total_income FROM flow WHERE type = 'income' and id = %s", (session["user_id"],))
+    income  = cursor.fetchone()
+    total_income = float(income[0])
+
+    # Get total expences
+    cursor.execute("SELECT SUM(amount) AS total_expence FROM flow WHERE type = 'expence' and id = %s", (session["user_id"],))
+    expence  = cursor.fetchone()
+    total_expence = float(expence[0])
+
+    # Get Balance
+    balance = total_income - total_expence
+
+    return render_template("dashbord.html", username=username, results=results, balance=balance)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -131,6 +156,11 @@ def register():
 
 @app.route("/income", methods=["GET", "POST"])
 def income():
+    if len(session) == 0:
+        return redirect("/login")
+    
+    if request.method == "GET":
+        return render_template("income.html")
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
@@ -151,12 +181,14 @@ def income():
         cursor.close()
 
         return redirect("/dashbord")
-    
-    else:
-        return render_template("income.html")
 
 @app.route("/expence", methods=["GET", "POST"])
 def expence():
+    if len(session) == 0:
+        return redirect("/login")
+    
+    if request.method == "GET":
+        return render_template("expence.html")
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
@@ -176,22 +208,3 @@ def expence():
         cursor.close()
 
         return redirect("/expence")
-    
-    else:
-        return render_template("expence.html")
-
-@app.route("/test", methods=["GET", "POST"])
-def test():
-    name = None
-    form = NamerForm()
-    # Validate
-    if form.validate_on_submit():
-        name = form.name.data
-        form.name.data = ''
-        flash("form subitted successfully")
-    return render_template("test.html", name=name, form=form)
-
-# Create a form class
-class NamerForm(FlaskForm):
-    name = StringField("What's your name", validators=[DataRequired()])
-    submit = SubmitField("Submit")

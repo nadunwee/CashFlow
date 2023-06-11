@@ -1,12 +1,34 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Index
+    Dashbord
 {% endblock %}
 
 
 {% block body %}
 
-<h1>this is dashbord</h1>
+<h1 style="color: white;">{{ username}} your balance is {{ balance }}</h1>
+<br><br>
+
+<div class="dashbord-table">
+    <table >
+        <thead> 
+            <th >Method</th>
+            <th >Amount</th>
+            <th >Type</th>
+            <th >Date & Time</th>
+        </thead>
+        <tbody>
+            {% for row in results %}
+            <tr>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td>{{ row[3] }}</td>
+                <td>{{ row[5] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 {% endblock %}

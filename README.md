@@ -1,6 +1,5 @@
 #  CashFlow
-
-CashFlow is a simple and intuitive tool that allows you to track your cash flow by recording your income and expenses. By inputting your financial transactions, CashFlow generates a clear and organized table that provides an overview of your cash flow.
+Expence Tracker for CS50 final project.
 
 ## Features 
 * Esy-to-use interface for inputting income and expenses. 

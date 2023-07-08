@@ -3,7 +3,7 @@ Expence Tracker for CS50 final project.
 
 ## Table of Contents
 
-- [Introduction]
+- [Introduction](##Introduction)
 - [Features]
 - [Technologies]
 - [Usage]
